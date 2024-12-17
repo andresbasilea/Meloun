@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Playlists</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        #playlist-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .playlist {
+            max-width: 300px;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .playlist img {
+            max-width: 100%;
+            max-height: 300px; /* Adjust this for the maximum height you want */
+            width: auto;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-top: 10px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Explore Playlists</h1>
+    <div id="playlist-container">
+        {% for playlist in playlists %}
+            <div class="playlist">
+                <h2>{{ playlist.name }}</h2>
+                {% if playlist.image_url %}
+                    <img src="{{ playlist.image_url }}" alt="Playlist Image">
+                {% else %}
+                    <p>No image available</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
