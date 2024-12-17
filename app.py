@@ -38,19 +38,28 @@ def explore():
     
     sp = Spotify(auth=token_info['access_token'])
     results = sp.current_user_playlists()
-    
-    playlists = results['items']  # Return playlists as JSON
-    
-    user_id = sp.current_user()['id']  # Get the authenticated user's ID
-    user_playlists = [playlist for playlist in playlists if playlist['owner']['id'] == user_id]
-    
+    playlists = results['items']
+    user_id = sp.current_user()['id']
 
-    for playlist in user_playlists:
-        if playlist['images']:
-            playlist['image_url'] = playlist['images'][0]['url']
-        else:
-            playlist['image_url'] = None  # Set image URL to None if no image is found
-    
+    user_playlists = []
+    for playlist in playlists:
+        if playlist['owner']['id'] == user_id:
+            if playlist['images']:
+                playlist_data = {
+                    'name': playlist['name'],
+                    'image_url': playlist['images'][0]['url'],
+                    'first_track_preview_url': None
+                }
+                # Get the first track's preview URL
+                tracks = sp.playlist_tracks(playlist['id'])
+                if tracks['items']:
+                    first_track = tracks['items'][0]['track']
+                    
+                    playlist_data['first_track_preview_url'] = first_track['preview_url']
+                    print(playlist_data['first_track_preview_url'])
+                user_playlists.append(playlist_data)
+
+
     return render_template('explore.html', playlists=user_playlists)
 
 if __name__ == '__main__':
