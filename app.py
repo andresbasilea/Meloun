@@ -11,7 +11,7 @@ with open('config.json') as f:
 CLIENT_ID = config['client_id']
 CLIENT_SECRET = config['client_secret']
 REDIRECT_URI = config['redirect_uri']
-SCOPE = 'user-library-read user-top-read playlist-read-private'
+SCOPE = 'user-library-read user-top-read playlist-read-private streaming'
 
 # Configure app and Spotify authentication
 app = Flask(__name__)
@@ -28,6 +28,7 @@ def login():
 def callback():
     token_info = sp_oauth.get_access_token(request.args['code'])
     session['token_info'] = token_info
+    print(token_info)
     return redirect(url_for('explore'))
 
 @app.route('/explore')
@@ -54,7 +55,7 @@ def explore():
                 tracks = sp.playlist_tracks(playlist['id'])
                 if tracks['items']:
                     first_track = tracks['items'][0]['track']
-                    
+                    #print(first_track)
                     playlist_data['first_track_preview_url'] = first_track['preview_url']
                     print(playlist_data['first_track_preview_url'])
                 user_playlists.append(playlist_data)
@@ -64,3 +65,4 @@ def explore():
 
 if __name__ == '__main__':
     app.run(debug=True)
+    
